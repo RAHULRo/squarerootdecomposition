@@ -1,0 +1,113 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+public class Main{
+public static PrintWriter out = new PrintWriter (new BufferedOutputStream(System.out));
+	public static void main(String sp[])throws IOException{
+	FastReader sc = new FastReader();
+		int n = 10;
+		int arr[] = {1,3,5,2,7,6,3,1,4,8};
+	
+		int sqrt = (int)Math.sqrt(n);
+		block = new int[sqrt+2];
+		build(arr, n, sqrt);
+		for(int i=0;i<=sqrt;i++){
+			System.out.println(block[i]);
+		}
+		System.out.println(query(arr, 2, 8, n, sqrt));
+		
+		update(arr, 2, sqrt, 15);
+		
+		System.out.println(query(arr, 2, 8, n, sqrt));
+	}
+
+	static int block[];
+	
+	public static void update(int arr[], int index, int sqrt, int val){
+		
+		int blockid = index/sqrt;
+		block[blockid] += (val - arr[index]);
+		arr[index] = val;
+		
+		return;
+	}
+	
+	public static int query(int arr[], int l, int r, int n, int sqrt){
+		
+		int ans = 0;
+		while(l<r && l!=0 && l%sqrt!=0){
+			ans += arr[l];
+			l++;
+		}
+		int blockid = l/sqrt;
+		while((l+sqrt)<=r){
+			ans += block[blockid];
+			blockid++;
+			l+=sqrt;
+		}
+		
+		while(l<=r){
+			ans += arr[l];
+			l++;
+		}
+		
+		return ans;
+	}
+	
+	public static void build(int arr[], int n, int sqrt){
+		
+		int blockid =-1;
+		for(int i=0;i<n;i++){
+			if(i%sqrt==0){
+				blockid++;
+			}
+			block[blockid] +=arr[i];
+		}
+	}
+	
+	
+	
+	public static class FastReader {
+		BufferedReader br;
+		StringTokenizer sz;
+
+
+		public FastReader() {
+			br = new BufferedReader(new InputStreamReader(System.in));
+		}
+
+		String next() {
+			while (sz == null || !sz.hasMoreTokens()) {
+				try {
+					sz = new StringTokenizer(br.readLine());
+				} catch (Exception r) {
+					r.printStackTrace();
+				}
+			}
+			return sz.nextToken();
+		}
+
+		int nextInt() {
+			return Integer.parseInt(next());//converts string to integer
+		}
+
+		double nextDouble() {
+			return Double.parseDouble(next());
+		}
+
+		long nextLong() {
+			return Long.parseLong(next());
+		}
+
+		String nextLine() {
+			String str = "";
+			try {
+				str = br.readLine();
+			} catch (Exception r) {
+				r.printStackTrace();
+			}
+			return str;
+		}
+	}
+
+}
